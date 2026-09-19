@@ -1,4 +1,4 @@
-#BukuPintar AI - Asisten PR Berbasis Buku Paket Resmi
+===BukuPintar AI - Asisten PR Berbasis Buku Paket Resmi===
 
 Aplikasi web modern berbasis AI yang dirancang untuk memecahkan masalah klasik pengerjaan tugas sekolah/kuliah: **jawaban PR yang wajib bersumber dan mengutip persis dari buku paket resmi**.
 
@@ -6,7 +6,7 @@ BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **
 
 ---
 
-##Fitur Unggulan
+Fitur Unggulan:
 
 - 1 **Perpustakaan Buku Bawaan**: Sudah dilengkapi modul materi buku pelajaran resmi Kurikulum Merdeka (Biologi SMA 11, Fisika SMA 10, Sejarah Indonesia SMA 11, PPKN SMA 10).
 - 2 **Upload Buku Digital Sendiri (PDF/TXT)**: Unggah file buku paket PDF sekolah kamu, sistem akan otomatis membaca dan mengindeks seluruh halamannya menjadi database pencarian AI.
