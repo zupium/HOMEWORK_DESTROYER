@@ -1,6 +1,6 @@
 ===BukuPintar AI - Asisten PR Berbasis Buku Paket Resmi===
 
-Aplikasi web modern berbasis AI yang dirancang untuk memecahkan masalah klasik pengerjaan tugas sekolah/kuliah: **jawaban PR yang wajib bersumber dan mengutip persis dari buku paket resmi**.
+Aplikasi web modern berbasis AI yang dirancang untuk memecahkan masalah klasik pengerjaan tugas-tugas sekolah/kuliah: **jawaban PR yang wajib bersumber dan mengutip persis dari buku paket resmi**.
 
 BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **Strict Grounding** dengan **GPT-OSS 120B** yang dijalankan lewat Groq API untuk membaca teks buku pelajaran digital, mencocokkan soal dengan halaman buku yang tepat, dan memberikan jawaban resmi lengkap dengan **nomor halaman** dan **kutipan kalimat asli buku**.
 
