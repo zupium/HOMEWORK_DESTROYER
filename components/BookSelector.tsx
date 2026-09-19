@@ -2,20 +2,22 @@
 
 import React from 'react';
 import { Book as BookType } from '@/lib/types';
-import { BookOpen, Plus, Sparkles, BookMarked } from 'lucide-react';
+import { Plus, Sparkles, BookMarked, Trash2 } from 'lucide-react';
 
 interface BookSelectorProps {
   books: BookType[];
   selectedBookId: string;
   onSelectBook: (book: BookType) => void;
   onOpenUpload: () => void;
+  onDeleteBook?: (bookId: string) => void;
 }
 
 export function BookSelector({
   books,
   selectedBookId,
   onSelectBook,
-  onOpenUpload
+  onOpenUpload,
+  onDeleteBook
 }: BookSelectorProps) {
   return (
     <aside className="shelf-panel">
@@ -51,9 +53,38 @@ export function BookSelector({
               <div className="book-card-header">
                 <span className="book-badge">{book.badge}</span>
                 {book.isCustom && (
-                  <span style={{ fontSize: '0.68rem', color: '#38bdf8', fontWeight: 600 }}>
-                    Unggahan Anda
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.68rem', color: '#38bdf8', fontWeight: 600 }}>
+                      Unggahan Anda
+                    </span>
+                    {onDeleteBook && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm(`Hapus buku "${book.title}" dari daftar Anda?`)) {
+                            onDeleteBook(book.id);
+                          }
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#94a3b8',
+                          cursor: 'pointer',
+                          padding: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          borderRadius: '4px',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+                        title="Hapus buku ini"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -71,17 +102,28 @@ export function BookSelector({
         })}
       </div>
 
-      <div style={{
-        marginTop: '10px',
-        padding: '12px',
-        background: 'rgba(99, 102, 241, 0.08)',
-        border: '1px dashed rgba(99, 102, 241, 0.3)',
-        borderRadius: 'var(--radius-md)',
-        fontSize: '0.75rem',
-        color: 'var(--text-secondary)',
-        lineHeight: 1.5
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#c7d2fe', fontWeight: 600, marginBottom: '4px' }}>
+      <div
+        style={{
+          marginTop: '10px',
+          padding: '12px',
+          background: 'rgba(99, 102, 241, 0.08)',
+          border: '1px dashed rgba(99, 102, 241, 0.3)',
+          borderRadius: 'var(--radius-md)',
+          fontSize: '0.75rem',
+          color: 'var(--text-secondary)',
+          lineHeight: 1.5
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            color: '#c7d2fe',
+            fontWeight: 600,
+            marginBottom: '4px'
+          }}
+        >
           <Sparkles size={14} /> AI Terkunci pada Buku
         </div>
         Setiap jawaban dipaksa mencocokkan bab dan kalimat asli dari buku yang aktif di atas.

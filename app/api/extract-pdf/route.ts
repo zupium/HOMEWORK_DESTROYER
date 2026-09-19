@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Book, BookSection } from '@/lib/types';
 import pdf from 'pdf-parse';
 
+export const maxDuration = 30; // Max execution timeout for Vercel functions if supported
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -17,11 +19,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Cek batas ukuran aman untuk Vercel Serverless Function (4.2 MB)
+    if (file.size > 4.2 * 1024 * 1024) {
+      return NextResponse.json(
+        {
+          error:
+            'Ukuran file terlalu besar untuk server Vercel (maksimal 4.5MB). Harap proses file melalui browser.'
+        },
+        { status: 413 }
+      );
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     let extractedText = '';
 
-    if (file.name.endsWith('.pdf')) {
+    if (file.name.toLowerCase().endsWith('.pdf')) {
       const pdfData = await pdf(buffer);
       extractedText = pdfData.text;
     } else {
@@ -31,12 +44,15 @@ export async function POST(req: NextRequest) {
 
     if (!extractedText || extractedText.trim().length === 0) {
       return NextResponse.json(
-        { error: 'Gagal mengekstrak teks dari file. Pastikan file tidak kosong dan bukan hasil scan gambar murni tanpa OCR.' },
+        {
+          error:
+            'Gagal mengekstrak teks dari file. Pastikan file tidak kosong dan bukan hasil scan gambar murni tanpa OCR.'
+        },
         { status: 400 }
       );
     }
 
-    // Pecah teks menjadi section/chunk logis berdasarkan estimasi halaman (kira-kira 1500-2000 karakter per halaman)
+    // Pecah teks menjadi section/chunk logis
     const CHUNK_SIZE = 1800;
     const paragraphs = extractedText.split(/\n\s*\n/);
     const sections: BookSection[] = [];
@@ -52,7 +68,7 @@ export async function POST(req: NextRequest) {
       if ((currentChunk + '\n' + trimmed).length > CHUNK_SIZE && currentChunk.length > 300) {
         sections.push({
           id: `custom-sec-${sectionIndex}`,
-          chapter: `Bab Terdeteksi / Halaman ${pageNumber}`,
+          chapter: `Bab Terdeteksi / Est. Halaman ${pageNumber}`,
           title: `Materi Bagian ${sectionIndex} (Hal. ${pageNumber})`,
           page: pageNumber,
           content: currentChunk.trim()
@@ -68,7 +84,7 @@ export async function POST(req: NextRequest) {
     if (currentChunk.trim().length > 0) {
       sections.push({
         id: `custom-sec-${sectionIndex}`,
-        chapter: `Bab Terdeteksi / Halaman ${pageNumber}`,
+        chapter: `Bab Terdeteksi / Est. Halaman ${pageNumber}`,
         title: `Materi Bagian ${sectionIndex} (Hal. ${pageNumber})`,
         page: pageNumber,
         content: currentChunk.trim()
@@ -96,7 +112,7 @@ export async function POST(req: NextRequest) {
     console.error('Error in /api/extract-pdf:', error);
     const err = error as Error;
     return NextResponse.json(
-      { error: err.message || 'Gagal memproses file buku digital.' },
+      { error: err.message || 'Gagal memproses file buku digital di server.' },
       { status: 500 }
     );
   }

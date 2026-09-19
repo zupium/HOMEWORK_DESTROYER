@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { SAMPLE_BOOKS } from '@/lib/books/sample-books';
+import { retrieveRelevantSections } from '@/lib/books/retriever';
 import { Book, ChatMessage, GroundingCitation } from '@/lib/types';
+import { getStoredCustomBooks, saveStoredCustomBook, deleteStoredCustomBook } from '@/lib/storage';
 import { BookSelector } from '@/components/BookSelector';
 import { AnswerCard } from '@/components/AnswerCard';
 import { ApiKeyModal } from '@/components/ApiKeyModal';
@@ -32,22 +34,21 @@ export default function HomePage() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Load API key and custom books from localStorage upon mounting
+  // Load API key and custom books from IndexedDB upon mounting
   useEffect(() => {
     const savedKey = localStorage.getItem('bukupintar_gemini_key') || '';
     setApiKey(savedKey);
 
-    try {
-      const savedCustomBooks = localStorage.getItem('bukupintar_custom_books');
-      if (savedCustomBooks) {
-        const parsed = JSON.parse(savedCustomBooks);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setBooks([...SAMPLE_BOOKS, ...parsed]);
+    // Ambil buku kustom yang disimpan di browser secara asinkron (IndexedDB)
+    getStoredCustomBooks()
+      .then(customBooks => {
+        if (customBooks && customBooks.length > 0) {
+          setBooks([...SAMPLE_BOOKS, ...customBooks]);
         }
-      }
-    } catch (e) {
-      console.error('Failed to load custom books from localStorage', e);
-    }
+      })
+      .catch(err => {
+        console.error('Failed to load custom books from storage:', err);
+      });
   }, []);
 
   // Auto scroll down on new message
@@ -60,14 +61,23 @@ export default function HomePage() {
     localStorage.setItem('bukupintar_gemini_key', key);
   };
 
-  const handleBookAdded = (newBook: Book) => {
+  const handleBookAdded = async (newBook: Book) => {
     const updated = [...books, newBook];
     setBooks(updated);
     setSelectedBook(newBook);
 
-    // Save custom books only
-    const customOnly = updated.filter(b => b.isCustom);
-    localStorage.setItem('bukupintar_custom_books', JSON.stringify(customOnly));
+    // Simpan ke IndexedDB (bisa menampung buku ukuran besar tanpa quota error)
+    await saveStoredCustomBook(newBook);
+  };
+
+  const handleDeleteBook = async (bookId: string) => {
+    await deleteStoredCustomBook(bookId);
+    const updated = books.filter(b => b.id !== bookId);
+    setBooks(updated);
+    if (selectedBook.id === bookId) {
+      setSelectedBook(SAMPLE_BOOKS[0]);
+      setMessages([]);
+    }
   };
 
   const sampleQuestionsByBook: Record<string, string[]> = {
@@ -115,18 +125,34 @@ export default function HomePage() {
     setIsLoading(true);
 
     try {
+      // Optimasi efisiensi untuk buku kustom unggahan:
+      // Eksekusi pencarian bab relevan di sisi browser dan kirimkan hanya 4 bab terbaik ke API.
+      // Ini membuat payload request sangat kecil (< 10 KB) dan mencegah limit 4.5MB Vercel.
+      let customSections = undefined;
+      if (selectedBook.isCustom) {
+        const retrieval = retrieveRelevantSections(selectedBook, query, 4);
+        customSections = retrieval.sections;
+      }
+
       const res = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bookId: selectedBook.id,
+          bookTitle: selectedBook.title,
           question: query,
           apiKey: apiKey || undefined,
-          customBook: selectedBook.isCustom ? selectedBook : undefined
+          relevantSections: customSections
         })
       });
 
-      const data = await res.json();
+      let data;
+      const resText = await res.text();
+      try {
+        data = JSON.parse(resText);
+      } catch {
+        throw new Error(`Respon server tidak valid (${res.status}): ${resText.slice(0, 100)}`);
+      }
 
       if (!res.ok) {
         if (res.status === 500 && data.error && data.error.includes('API Key')) {
@@ -192,6 +218,7 @@ export default function HomePage() {
             setErrorMessage('');
           }}
           onOpenUpload={() => setIsUploadModalOpen(true)}
+          onDeleteBook={handleDeleteBook}
         />
 
         {/* Right Column: Q&A Workspace */}
@@ -245,17 +272,19 @@ export default function HomePage() {
 
           {/* Error Banner */}
           {errorMessage && (
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              borderRadius: 'var(--radius-md)',
-              padding: '14px 18px',
-              color: '#f87171',
-              fontSize: '0.88rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
+            <div
+              style={{
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: 'var(--radius-md)',
+                padding: '14px 18px',
+                color: '#f87171',
+                fontSize: '0.88rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}
+            >
               <AlertTriangle size={20} style={{ flexShrink: 0 }} />
               <div style={{ flex: 1 }}>{errorMessage}</div>
               {!apiKey && (

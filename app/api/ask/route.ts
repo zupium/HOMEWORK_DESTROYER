@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SAMPLE_BOOKS } from '@/lib/books/sample-books';
 import { retrieveRelevantSections } from '@/lib/books/retriever';
 import { askGeminiAboutBook } from '@/lib/gemini';
-import { Book } from '@/lib/types';
+import { Book, BookSection } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { bookId, question, apiKey, customBook } = body;
+    const { bookId, bookTitle, question, apiKey, customBook, relevantSections } = body;
 
     if (!question || typeof question !== 'string') {
       return NextResponse.json(
@@ -16,27 +16,46 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Cari buku yang dipilih (bisa dari sampel atau buku kustom yang diunggah)
-    let selectedBook: Book | undefined;
-    if (customBook && customBook.id === bookId) {
-      selectedBook = customBook;
+    let sections: BookSection[] = [];
+    let score = 0;
+    let targetBookTitle = bookTitle || '';
+
+    // 1. Jika client sudah mengirimkan potongan bab yang relevan secara efisien
+    // (menghemat bandwidth dan menghindari limit 4.5MB Vercel untuk buku kustom)
+    if (Array.isArray(relevantSections) && relevantSections.length > 0) {
+      sections = relevantSections;
+      score = 15;
+      if (!targetBookTitle) {
+        targetBookTitle = customBook?.title || 'Buku Paket Siswa';
+      }
     } else {
-      selectedBook = SAMPLE_BOOKS.find(b => b.id === bookId);
-    }
+      // Cari buku dari database sampel atau buku kustom lengkap
+      let selectedBook: Book | undefined;
+      if (customBook && customBook.id === bookId) {
+        selectedBook = customBook;
+      } else {
+        selectedBook = SAMPLE_BOOKS.find(b => b.id === bookId);
+      }
 
-    if (!selectedBook) {
-      return NextResponse.json(
-        { error: 'Buku paket yang dipilih tidak ditemukan.' },
-        { status: 404 }
-      );
-    }
+      if (!selectedBook) {
+        return NextResponse.json(
+          { error: 'Buku pelajaran yang dipilih tidak ditemukan.' },
+          { status: 404 }
+        );
+      }
 
-    // 1. Temukan bagian / bab buku yang paling relevan
-    const { sections, score } = retrieveRelevantSections(selectedBook, question, 4);
+      targetBookTitle = selectedBook.title;
+
+      // Temukan bagian / bab buku yang paling relevan
+      const retrieval = retrieveRelevantSections(selectedBook, question, 4);
+      sections = retrieval.sections;
+      score = retrieval.score;
+    }
 
     if (sections.length === 0) {
       return NextResponse.json({
-        answer: 'Materi untuk menjawab pertanyaan ini tidak ditemukan dalam buku yang dipilih.',
+        answer:
+          'Materi untuk menjawab pertanyaan ini tidak ditemukan dalam buku yang dipilih. Coba gunakan kata kunci materi yang lebih spesifik.',
         citations: [],
         foundInBook: false,
         modelUsed: 'none'
@@ -46,7 +65,7 @@ export async function POST(req: NextRequest) {
     // 2. Hubungi Gemini API dengan instruksi grounding ketat
     const result = await askGeminiAboutBook({
       apiKey,
-      bookTitle: selectedBook.title,
+      bookTitle: targetBookTitle,
       question,
       sections
     });
