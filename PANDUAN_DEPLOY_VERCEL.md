@@ -8,7 +8,7 @@ Aplikasi **BukuPintar AI** dibuat menggunakan **Next.js**, framework resmi yang 
 
 1. **Akun GitHub**: [github.com](https://github.com/) (Gratis)
 2. **Akun Vercel**: [vercel.com](https://vercel.com/) (Bisa langsung login menggunakan akun GitHub kamu)
-3. **Google Gemini API Key**: Dapatkan secara gratis di [Google AI Studio](https://aistudio.google.com/app/apikey)
+3. **Groq API Key**: Dapatkan secara gratis di [Groq Console](https://console.groq.com/keys)
 
 ---
 
@@ -54,8 +54,8 @@ Sebelum menekan tombol Deploy, atur API Key agar AI bisa langsung aktif untuk se
 
 1. Di halaman konfigurasi Vercel, buka menu **"Environment Variables"** (klik panah dropdown-nya).
 2. Isi kolom formulir:
-   * **Key (Nama)**: `GEMINI_API_KEY`
-   * **Value (Isi)**: Masukkan API Key kamu (dimulai dengan `AIzaSy...`)
+   * **Key (Nama)**: `GROQ_API_KEY`
+   * **Value (Isi)**: Masukkan API Key kamu (dimulai dengan `gsk_...`)
 3. Klik tombol **"Add"**.
 
 > *Catatan: Jika kamu tidak memasukkan API Key di langkah ini, aplikasi tetap bisa dibuka! Pengguna nanti bisa memasukkan API Key sendiri melalui tombol "Atur API Key" di pojok kanan atas website.*
@@ -93,9 +93,9 @@ Jika kamu lebih suka deploy langsung dari terminal tanpa membuka web GitHub:
    * *Project name?* -> `bukupintar-ai`
    * *In which directory?* -> `./`
 
-3. Tambahkan environment variable Gemini API Key:
+3. Tambahkan environment variable Groq API Key:
    ```powershell
-   npx vercel env add GEMINI_API_KEY
+   npx vercel env add GROQ_API_KEY
    ```
    *(Paste API Key kamu saat diminta, lalu pilih Environment: Production, Preview, Development).*
 
@@ -106,14 +106,13 @@ Jika kamu lebih suka deploy langsung dari terminal tanpa membuka web GitHub:
 
 ---
 
-## 🔑 Cara Mendapatkan Google Gemini API Key Gratis
+## 🔑 Cara Mendapatkan Groq API Key Gratis
 
-1. Kunjungi website [Google AI Studio](https://aistudio.google.com/app/apikey).
-2. Login dengan akun Google / Gmail kamu.
-3. Klik tombol biru **"Create API key"**.
-4. Pilih **"Create API key in new project"**.
-5. Salin kode API key yang muncul (contoh: `AIzaSyD...`).
-6. API key ini gratis untuk ribuan kali request per hari dan siap digunakan!
+1. Kunjungi [Groq Console](https://console.groq.com/keys).
+2. Login / daftar akun (bisa dengan Google atau GitHub).
+3. Klik tombol **"Create API Key"** lalu beri nama bebas.
+4. Salin key yang muncul (contoh: `gsk_...`) — key hanya ditampilkan sekali.
+5. Free tier Groq memiliki batas request/token per menit dan per hari; jika terkena limit, tunggu sebentaran lalu coba lagi.
 
 ---
 

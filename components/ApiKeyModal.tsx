@@ -42,7 +42,7 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
             }}>
               <Key size={18} />
             </div>
-            <h3 className="modal-title">Pengaturan Gemini API Key</h3>
+            <h3 className="modal-title">Pengaturan Groq API Key</h3>
           </div>
           <button 
             type="button" 
@@ -55,7 +55,7 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
         </div>
 
         <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-          Untuk menjalankan AI, kamu memerlukan <strong>Google Gemini API Key</strong>. Jika sudah dideploy di Vercel, kamu juga bisa menyimpannya di Environment Variable <code>GEMINI_API_KEY</code>.
+          Untuk menjalankan AI, kamu memerlukan <strong>Groq API Key</strong> (model GPT-OSS 120B). Jika sudah dideploy di Vercel, kamu juga bisa menyimpannya di Environment Variable <code>GROQ_API_KEY</code>.
         </p>
 
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -64,7 +64,7 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
             <input
               type="password"
               className="text-input"
-              placeholder="AIzaSy..."
+              placeholder="gsk_..."
               value={inputKey}
               onChange={e => setInputKey(e.target.value)}
             />
@@ -79,12 +79,12 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
           }}>
             <span>Belum punya key?</span>
             <a
-              href="https://aistudio.google.com/app/apikey"
+              href="https://console.groq.com/keys"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: '#818cf8', display: 'inline-flex', alignItems: 'center', gap: '3px' }}
             >
-              Dapatkan Gratis di Google AI Studio <ExternalLink size={12} />
+              Dapatkan Gratis di Groq Console <ExternalLink size={12} />
             </a>
           </div>
 

@@ -2,7 +2,7 @@
 
 Aplikasi web modern berbasis AI yang dirancang untuk memecahkan masalah klasik pengerjaan tugas sekolah/kuliah: **jawaban PR yang wajib bersumber dan mengutip persis dari buku paket resmi**.
 
-BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **Strict Grounding** dengan Google Gemini API untuk membaca teks buku pelajaran digital, mencocokkan soal dengan halaman buku yang tepat, dan memberikan jawaban resmi lengkap dengan **nomor halaman** dan **kutipan kalimat asli buku**.
+BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **Strict Grounding** dengan **GPT-OSS 120B** yang dijalankan lewat Groq API untuk membaca teks buku pelajaran digital, mencocokkan soal dengan halaman buku yang tepat, dan memberikan jawaban resmi lengkap dengan **nomor halaman** dan **kutipan kalimat asli buku**.
 
 ---
 
@@ -22,7 +22,7 @@ BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Serverless Functions)
 - **Language**: TypeScript
 - **Styling**: Modern Vanilla CSS (Glassmorphism, custom responsive theme)
-- **AI Engine**: [Google Gemini API](https://ai.google.dev/) (`@google/genai` SDK)
+- **AI Engine**: [GPT-OSS 120B](https://console.groq.com/docs/model/openai/gpt-oss-120b) via [Groq API](https://console.groq.com/) (REST, tanpa SDK tambahan)
 - **Document Engine**: `pdf-parse` untuk ekstraksi teks PDF digital
 - **Icons**: `lucide-react`
 - **Hosting**: [Vercel](https://vercel.com/)
@@ -43,9 +43,9 @@ BukuPintar AI menggunakan teknik **RAG (Retrieval-Augmented Generation)** dan **
 
 3. **Buat file `.env.local`**:
    ```env
-   GEMINI_API_KEY=AIzaSy...
+   GROQ_API_KEY=gsk_...
    ```
-   *(Dapatkan gratis di [Google AI Studio](https://aistudio.google.com/app/apikey))*
+   *(Dapatkan gratis di [Groq Console](https://console.groq.com/keys))*
 
 4. **Jalankan Server Development**:
    ```bash

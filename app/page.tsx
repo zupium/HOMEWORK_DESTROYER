@@ -36,7 +36,7 @@ export default function HomePage() {
 
   // Load API key and custom books from IndexedDB upon mounting
   useEffect(() => {
-    const savedKey = localStorage.getItem('bukupintar_gemini_key') || '';
+    const savedKey = localStorage.getItem('bukupintar_groq_key') || '';
     setApiKey(savedKey);
 
     // Ambil buku kustom yang disimpan di browser secara asinkron (IndexedDB)
@@ -58,7 +58,7 @@ export default function HomePage() {
 
   const handleSaveApiKey = (key: string) => {
     setApiKey(key);
-    localStorage.setItem('bukupintar_gemini_key', key);
+    localStorage.setItem('bukupintar_groq_key', key);
   };
 
   const handleBookAdded = async (newBook: Book) => {
@@ -155,7 +155,7 @@ export default function HomePage() {
       }
 
       if (!res.ok) {
-        if (res.status === 500 && data.error && data.error.includes('API Key')) {
+        if (data.error && data.error.includes('API Key')) {
           setIsKeyModalOpen(true);
         }
         throw new Error(data.error || 'Gagal mendapatkan jawaban dari AI.');

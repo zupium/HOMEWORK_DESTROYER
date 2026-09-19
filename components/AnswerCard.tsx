@@ -16,7 +16,7 @@ export function AnswerCard({
   answer,
   citations,
   foundInBook,
-  modelUsed = 'gemini-2.5-flash',
+  modelUsed = 'openai/gpt-oss-120b',
   bookTitle
 }: AnswerCardProps) {
   const [copied, setCopied] = useState(false);

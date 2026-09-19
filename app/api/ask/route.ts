@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SAMPLE_BOOKS } from '@/lib/books/sample-books';
 import { retrieveRelevantSections } from '@/lib/books/retriever';
-import { askGeminiAboutBook } from '@/lib/gemini';
+import { askGroqAboutBook, GroqError } from '@/lib/groq';
 import { Book, BookSection } from '@/lib/types';
+
+export const maxDuration = 60; // GPT-OSS 120B melakukan reasoning, beri waktu cukup
 
 export async function POST(req: NextRequest) {
   try {
@@ -62,8 +64,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 2. Hubungi Gemini API dengan instruksi grounding ketat
-    const result = await askGeminiAboutBook({
+    // 2. Hubungi Groq API (GPT-OSS 120B) dengan instruksi grounding ketat
+    const result = await askGroqAboutBook({
       apiKey,
       bookTitle: targetBookTitle,
       question,
@@ -79,11 +81,12 @@ export async function POST(req: NextRequest) {
   } catch (error: unknown) {
     console.error('Error in /api/ask:', error);
     const err = error as Error;
+    const status = error instanceof GroqError ? error.status : 500;
     return NextResponse.json(
       {
         error: err.message || 'Terjadi kesalahan saat memproses jawaban dengan AI.'
       },
-      { status: 500 }
+      { status }
     );
   }
 }
