@@ -9,11 +9,10 @@ import { BookSelector } from '@/components/BookSelector';
 import { AnswerCard } from '@/components/AnswerCard';
 import { ApiKeyModal } from '@/components/ApiKeyModal';
 import { PdfUploadModal } from '@/components/PdfUploadModal';
+import { Orb } from '@/components/Orb';
 import {
-  GraduationCap,
   Send,
   Key,
-  HelpCircle,
   BookOpen,
   Loader2,
   Sparkles,
@@ -185,7 +184,7 @@ export default function HomePage() {
       <header className="app-header">
         <div className="brand-group">
           <div className="brand-logo">
-            <GraduationCap size={24} />
+            <Orb />
           </div>
           <div>
             <h1 className="brand-title">BukuPintar AI</h1>
@@ -201,7 +200,7 @@ export default function HomePage() {
             className="btn btn-secondary"
             style={{ fontSize: '0.8rem' }}
           >
-            <Key size={15} color={apiKey ? '#34d399' : '#f59e0b'} />
+            <Key size={15} color={apiKey ? '#00ffaa' : '#ffb84d'} />
             <span>{apiKey ? 'API Key Terpasang' : 'Atur API Key'}</span>
           </button>
         </div>
@@ -274,11 +273,11 @@ export default function HomePage() {
           {errorMessage && (
             <div
               style={{
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
+                background: 'rgba(255, 68, 102, 0.08)',
+                border: '1px solid rgba(255, 68, 102, 0.35)',
                 borderRadius: 'var(--radius-md)',
                 padding: '14px 18px',
-                color: '#f87171',
+                color: '#ff8fa3',
                 fontSize: '0.88rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -304,9 +303,9 @@ export default function HomePage() {
             {messages.length === 0 && (
               <div className="empty-state">
                 <div className="empty-state-icon">
-                  <HelpCircle size={28} />
+                  <Orb />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <h3 style={{ fontFamily: 'var(--font-head)', fontSize: '0.95rem', letterSpacing: '0.04em', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Punya PR yang Jawabannya Harus dari Buku?
                 </h3>
                 <p style={{ maxWidth: '460px', fontSize: '0.85rem', lineHeight: 1.6 }}>

@@ -137,8 +137,8 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                background: 'rgba(16, 185, 129, 0.15)',
-                color: '#34d399',
+                background: 'rgba(0, 255, 170, 0.12)',
+                color: '#00ffaa',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -167,11 +167,11 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
         {errorMsg && (
           <div
             style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'rgba(255, 68, 102, 0.08)',
+              border: '1px solid rgba(255, 68, 102, 0.35)',
               borderRadius: 'var(--radius-sm)',
               padding: '10px 14px',
-              color: '#f87171',
+              color: '#ff8fa3',
               fontSize: '0.82rem',
               lineHeight: 1.5
             }}
@@ -184,12 +184,12 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
           {/* File Picker */}
           <div
             style={{
-              border: file ? '2px solid rgba(52, 211, 153, 0.4)' : '2px dashed var(--border-subtle)',
+              border: file ? '2px solid rgba(0, 255, 170, 0.4)' : '2px dashed var(--border-subtle)',
               borderRadius: 'var(--radius-md)',
               padding: '22px 16px',
               textAlign: 'center',
               cursor: isLoading ? 'not-allowed' : 'pointer',
-              background: 'rgba(15, 23, 42, 0.4)',
+              background: 'rgba(13, 20, 37, 0.6)',
               transition: 'all 0.2s ease'
             }}
             onClick={() => !isLoading && fileInputRef.current?.click()}
@@ -203,10 +203,10 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
               onChange={handleFileChange}
             />
             {file ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#34d399' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#00ffaa' }}>
                 <CheckCircle2 size={26} />
                 <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#f8fafc' }}>{file.name}</div>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#e8f0ff' }}>{file.name}</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                     {(file.size / 1024 / 1024).toFixed(2)} MB • Ekstraksi Instan di Browser (Bebas Limit Server)
                   </div>
@@ -227,8 +227,8 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
           {isLoading && progress && (
             <div
               style={{
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
+                background: 'rgba(17, 28, 53, 0.7)',
+                border: '1px solid rgba(0, 200, 255, 0.3)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '12px 16px',
                 display: 'flex',
@@ -240,7 +240,7 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
                 <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Cpu size={14} color="var(--accent-primary)" /> {progress.status}
                 </span>
-                <span style={{ fontWeight: 700, color: '#38bdf8' }}>{progress.percent}%</span>
+                <span style={{ fontWeight: 700, color: '#00c8ff' }}>{progress.percent}%</span>
               </div>
               <div
                 style={{
@@ -255,7 +255,7 @@ export function PdfUploadModal({ isOpen, onClose, onBookAdded }: PdfUploadModalP
                   style={{
                     width: `${progress.percent}%`,
                     height: '100%',
-                    background: 'linear-gradient(90deg, #6366f1 0%, #38bdf8 100%)',
+                    background: 'linear-gradient(90deg, #00c8ff 0%, #7b4fff 100%)',
                     transition: 'width 0.25s ease'
                   }}
                 />

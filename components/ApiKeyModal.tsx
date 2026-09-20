@@ -37,7 +37,7 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
               width: '36px', height: '36px', borderRadius: '10px',
-              background: 'rgba(99, 102, 241, 0.15)', color: '#818cf8',
+              background: 'rgba(0, 200, 255, 0.12)', color: '#00c8ff',
               display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}>
               <Key size={18} />
@@ -82,7 +82,7 @@ export function ApiKeyModal({ isOpen, onClose, apiKey, onSaveKey }: ApiKeyModalP
               href="https://console.groq.com/keys"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#818cf8', display: 'inline-flex', alignItems: 'center', gap: '3px' }}
+              style={{ color: '#00c8ff', display: 'inline-flex', alignItems: 'center', gap: '3px' }}
             >
               Dapatkan Gratis di Groq Console <ExternalLink size={12} />
             </a>

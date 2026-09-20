@@ -56,7 +56,7 @@ export function AnswerCard({
           >
             {copied ? (
               <>
-                <Check size={14} color="#34d399" /> Disalin!
+                <Check size={14} color="#00ffaa" /> Disalin!
               </>
             ) : (
               <>
@@ -79,7 +79,7 @@ export function AnswerCard({
               <span>Sumber Rujukan Buku Pegangan</span>
             </div>
             <span style={{
-              background: 'rgba(16, 185, 129, 0.2)',
+              background: 'rgba(0, 255, 170, 0.15)',
               padding: '2px 8px',
               borderRadius: '6px',
               fontSize: '0.75rem',

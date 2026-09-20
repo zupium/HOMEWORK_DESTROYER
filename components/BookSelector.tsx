@@ -23,7 +23,7 @@ export function BookSelector({
     <aside className="shelf-panel">
       <div className="section-title-row">
         <div className="section-title">
-          <BookMarked size={18} color="#818cf8" />
+          <BookMarked size={18} color="#00c8ff" />
           <span>Perpustakaan Buku Paket</span>
         </div>
         <button
@@ -54,7 +54,7 @@ export function BookSelector({
                 <span className="book-badge">{book.badge}</span>
                 {book.isCustom && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '0.68rem', color: '#38bdf8', fontWeight: 600 }}>
+                    <span style={{ fontSize: '0.68rem', color: '#00c8ff', fontWeight: 600 }}>
                       Unggahan Anda
                     </span>
                     {onDeleteBook && (
@@ -69,7 +69,7 @@ export function BookSelector({
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#94a3b8',
+                          color: '#7686a8',
                           cursor: 'pointer',
                           padding: '2px',
                           display: 'flex',
@@ -77,8 +77,8 @@ export function BookSelector({
                           borderRadius: '4px',
                           transition: 'color 0.2s'
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#ff4466')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = '#7686a8')}
                         title="Hapus buku ini"
                       >
                         <Trash2 size={13} />
@@ -106,8 +106,8 @@ export function BookSelector({
         style={{
           marginTop: '10px',
           padding: '12px',
-          background: 'rgba(99, 102, 241, 0.08)',
-          border: '1px dashed rgba(99, 102, 241, 0.3)',
+          background: 'rgba(0, 200, 255, 0.05)',
+          border: '1px dashed rgba(0, 200, 255, 0.3)',
           borderRadius: 'var(--radius-md)',
           fontSize: '0.75rem',
           color: 'var(--text-secondary)',
@@ -119,7 +119,7 @@ export function BookSelector({
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            color: '#c7d2fe',
+            color: '#e8f0ff',
             fontWeight: 600,
             marginBottom: '4px'
           }}

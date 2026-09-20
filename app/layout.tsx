@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 export const metadata: Metadata = {
   title: 'BukuPintar AI - Asisten PR Berbasis Buku Paket Digital',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body>{children}</body>
+      <body>
+        <SpaceBackground />
+        {children}
+      </body>
     </html>
   );
 }
